@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>A simple authentication requiring app</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<form action="#" th:action="@{/login}" th:object="${credentials}" method="post">
+    <p>Username: <input id="txtUsername" type="text" th:field="*{username}" /></p>
+    <p>Password: <input id="txtPassword" type="password" th:field="*{password}" /></p>
+    <p><input id="btnLogin" type="submit" value="Submit" /></p>
+</form>
+</body>
+</html>
