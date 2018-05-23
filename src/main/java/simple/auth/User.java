@@ -1,12 +1,18 @@
 package simple.auth;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
     private final int id;
     private final String username;
     private final String firstname;
     private final String lastname;
 
-    public User(int id, String username, String firstname, String lastname) {
+    @JsonCreator
+    public User(@JsonProperty int id, @JsonProperty String username, @JsonProperty("firstname") String firstname, @JsonProperty("lastname") String lastname) {
         this.id = id;
         this.username = username;
         this.firstname = firstname;
@@ -27,5 +33,15 @@ public class User {
 
     public String getLastname() {
         return lastname;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                '}';
     }
 }
