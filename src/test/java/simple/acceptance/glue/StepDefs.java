@@ -1,6 +1,8 @@
 package simple.acceptance.glue;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
 import cucumber.api.java.After;
+import cucumber.api.java.Before;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.openqa.selenium.By;
@@ -10,17 +12,27 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import simple.Application;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class StepDefs {
+public class StepDefs  {
+    private WireMockServer wireMockServer;
+
     @Value("${app.baseurl}")
     private String baseurl;
 
     @When("^I authenticate$")
     public void iAuthenticate() throws Throwable {
+        wireMockServer
+                .stubFor(get(urlEqualTo("/login?username=Paul&password=Secret"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json;charset=UTF-8")
+                        .withBody("{\"id\":123,\"username\":\"paul\",\"firstname\":\"Paul\",\"lastname\":\"Williams\"}")));
         WebDriver driver = DriverFactory.getInstance().getDriver();
         driver.navigate().to(baseurl + "/loginForm");
 
@@ -36,8 +48,15 @@ public class StepDefs {
         assertThat(bodyText, is("Hi, Paul Williams"));
     }
 
+    @Before
+    public void before() {
+        wireMockServer = new WireMockServer(options().port(8081));
+        wireMockServer.start();
+    }
+
     @After
-    public void closeBrowser() {
+    public void after() {
+        wireMockServer.stop();
         DriverFactory.getInstance().getDriver().quit();
     }
 }
