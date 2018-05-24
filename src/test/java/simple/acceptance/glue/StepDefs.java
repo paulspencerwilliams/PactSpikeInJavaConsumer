@@ -21,6 +21,7 @@ import static org.junit.Assert.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class StepDefs  {
     private WireMockServer wireMockServer;
+    private WebDriver driver;
 
     @Value("${app.baseurl}")
     private String baseurl;
@@ -33,7 +34,6 @@ public class StepDefs  {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json;charset=UTF-8")
                         .withBody("{\"id\":123,\"username\":\"paul\",\"firstname\":\"Paul\",\"lastname\":\"Williams\"}")));
-        WebDriver driver = DriverFactory.getInstance().getDriver();
         driver.navigate().to(baseurl + "/loginForm");
 
         driver.findElement(By.id("txtUsername")).sendKeys("Paul");
@@ -52,11 +52,13 @@ public class StepDefs  {
     public void before() {
         wireMockServer = new WireMockServer(options().port(8081));
         wireMockServer.start();
+        driver = DriverFactory.getInstance().getDriver();
+
     }
 
     @After
     public void after() {
         wireMockServer.stop();
-        DriverFactory.getInstance().getDriver().quit();
+        DriverFactory.getInstance().removeDriver();
     }
 }
