@@ -38,5 +38,4 @@ dependencies {
     testCompile("info.cukes:cucumber-spring:1.2.5")
     testCompile("org.mockito:mockito-core:1.+")
     testCompile("net.sourceforge.htmlunit:htmlunit")
-    testCompile("au.com.dius:pact-jvm-consumer-junit_2.11")
 }
