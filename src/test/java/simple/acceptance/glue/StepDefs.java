@@ -32,9 +32,8 @@ public class StepDefs {
     @Then("^I will be welcomed personally$")
     public void iWillBeWelcomedPersonally() throws Throwable {
         WebDriver driver = DriverFactory.getInstance().getDriver();
-        driver.navigate().to(baseurl);
         String bodyText = driver.findElement(By.tagName("body")).getText();
-        assertThat(bodyText, is("Greetings..."));
+        assertThat(bodyText, is("Hi, Paul Williams"));
     }
 
     @After
