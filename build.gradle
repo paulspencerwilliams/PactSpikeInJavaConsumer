@@ -38,4 +38,5 @@ dependencies {
     testCompile("info.cukes:cucumber-spring:1.2.5")
     testCompile("org.mockito:mockito-core:1.+")
     testCompile("net.sourceforge.htmlunit:htmlunit")
+    testCompile("com.github.tomakehurst:wiremock:2.17.0")
 }
