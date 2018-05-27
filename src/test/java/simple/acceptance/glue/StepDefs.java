@@ -29,7 +29,7 @@ public class StepDefs  {
     @When("^I authenticate$")
     public void iAuthenticate() throws Throwable {
         wireMockServer
-                .stubFor(get(urlEqualTo("/login?username=Paul&password=Secret"))
+                .stubFor(get(urlEqualTo("/login"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json;charset=UTF-8")

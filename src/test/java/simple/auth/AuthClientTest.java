@@ -22,18 +22,22 @@ public class AuthClientTest {
 
     @Pact(consumer = "simple-web")
     public RequestResponsePact createPact(PactDslWithProvider builder) {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "application/json;charset=UTF-8");
+
+        Map<String, String> requestHeaders = new HashMap<>();
+        requestHeaders.put("Accept", "application/json, application/cbor, application/*+json");
+
+        Map<String, String> expectedResponseHeaders = new HashMap<>();
+        expectedResponseHeaders.put("Content-Type", "application/json;charset=UTF-8");
 
         return builder
                 .given("test login")
                     .uponReceiving("successful login")
                     .path("/login")
-                    .encodedQuery("username=Paul&password=Secret")
+                    .headers(requestHeaders)
                     .method("GET")
                 .willRespondWith()
                     .status(200)
-                    .headers(headers)
+                    .headers(expectedResponseHeaders)
                     .body("{\"id\":123,\"username\":\"paul\",\"firstname\":\"Paul\",\"lastname\":\"Williams\"}")
                 .toPact();
     }

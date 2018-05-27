@@ -13,9 +13,7 @@ public class AuthClient {
 
     public User login(String username, String password) {
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://localhost:8081/login")
-                .queryParam("username", username)
-                .queryParam("password", password);
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://localhost:8081/login");
 
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.getForObject(builder.build().toUri(), User.class);
