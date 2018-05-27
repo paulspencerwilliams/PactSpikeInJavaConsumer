@@ -29,11 +29,14 @@ public class StepDefs  {
     @When("^I authenticate$")
     public void iAuthenticate() throws Throwable {
         wireMockServer
-                .stubFor(get(urlEqualTo("/login"))
+                .stubFor(get(urlPathMatching("/login*"))
+                        .withQueryParam("username",  equalTo("Paul"))
+                        .withQueryParam("password", equalTo("Secret"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json;charset=UTF-8")
                         .withBody("{\"id\":123,\"username\":\"paul\",\"firstname\":\"Paul\",\"lastname\":\"Williams\"}")));
+
         driver.navigate().to(baseurl + "/loginForm");
 
         driver.findElement(By.id("txtUsername")).sendKeys("Paul");

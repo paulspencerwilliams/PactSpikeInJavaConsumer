@@ -33,6 +33,7 @@ public class AuthClientTest {
                 .given("test login")
                     .uponReceiving("successful login")
                     .path("/login")
+                    .query("username=Paul&password=Secret")
                     .headers(requestHeaders)
                     .method("GET")
                 .willRespondWith()
