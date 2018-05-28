@@ -11,22 +11,22 @@
         <tr>
             <td>Username:</td>
             <td><input id="txtUsername" type="text" th:field="*{username}" /></td>
-            <td th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username errors</td>
+            <td id="errorUsername" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username errors</td>
         </tr>
         <tr>
             <td>Age:</td>
             <td><input id="txtAge" type="text" th:field="*{age}" /></td>
-            <td th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age errors</td>
+            <td id="errorAge" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age errors</td>
         </tr>
         <tr>
             <td>Password:</td>
             <td><input id="txtPassword" type="password" th:field="*{password}" /></td>
-            <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password errors</td>
+            <td id="errorPassword" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password errors</td>
         </tr>
         <tr>
             <td>Confirm password:</td>
             <td><input id="txtConfirmPassword" type="password" th:field="*{confirmPassword}" /></td>
-            <td th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Confirm password errors</td>
+            <td id="errorConfirmPassword" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Confirm password errors</td>
         </tr>
         <tr>
             <td><p><input id="btnRegister" type="submit" value="Submit" /></p></td>
