@@ -30,7 +30,7 @@ pact {
     publish {
         pactDirectory = 'target/pacts'
         pactBrokerUrl = 'http://localhost'
-        version = 0.1
+        version = 0.3
     }
 }
 

@@ -30,8 +30,8 @@ public class AuthClientTest {
         expectedResponseHeaders.put("Content-Type", "application/json;charset=UTF-8");
 
         return builder
-                .given("test login")
-                    .uponReceiving("successful login")
+                .given("Paul exists with password Secret")
+                    .uponReceiving("valid authentication details")
                     .path("/login")
                     .query("username=Paul&password=Secret")
                     .headers(requestHeaders)
