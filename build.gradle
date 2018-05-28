@@ -7,10 +7,15 @@ buildscript {
     }
 }
 
+plugins {
+    id "au.com.dius.pact" version "3.5.16"
+}
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+
 
 bootJar {
     baseName = 'simple-web'
@@ -19,6 +24,14 @@ bootJar {
 
 repositories {
     mavenCentral()
+}
+
+pact {
+    publish {
+        pactDirectory = 'target/pacts'
+        pactBrokerUrl = 'http://localhost'
+        version = 0.1
+    }
 }
 
 sourceCompatibility = 1.8
