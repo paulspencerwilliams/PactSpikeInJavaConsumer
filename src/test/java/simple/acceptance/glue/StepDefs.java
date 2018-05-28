@@ -51,6 +51,27 @@ public class StepDefs  {
         assertThat(bodyText, is("Hi, Paul Williams"));
     }
 
+    @When("^I attempt to log in with the wrong password$")
+    public void iAttemptToLogInWithTheWrongPassword() throws Throwable {
+        wireMockServer
+                .stubFor(get(urlPathMatching("/login*"))
+                        .withQueryParam("username",  equalTo("Paul"))
+                        .withQueryParam("password", equalTo("Unconcealed"))
+                        .willReturn(aResponse()
+                                .withStatus(401)));
+
+        driver.navigate().to(baseurl + "/loginForm");
+
+        driver.findElement(By.id("txtUsername")).sendKeys("Paul");
+        driver.findElement(By.id("txtPassword")).sendKeys("Unconcealed");
+        driver.findElement(By.id("btnLogin")).click();
+    }
+
+    @Then("^I will be prompted to try again suggesting why$")
+    public void iWillBePromptedToTryAgainSuggestingWhy() throws Throwable {
+        assertThat(driver.findElement(By.id("errorMessage")).getText(), is("Bad credentials, try again"));
+    }
+
     @Before
     public void before() {
         wireMockServer = new WireMockServer(options().port(8081));
