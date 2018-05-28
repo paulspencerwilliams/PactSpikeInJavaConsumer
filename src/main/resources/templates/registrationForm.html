@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>A simple authentication requiring app</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<form action="#" th:action="@{/register}" th:object="${registrationForm}" method="post">
+    <p id="errorMessage" th:if="${#fields.hasErrors()}">There are errors on this form</p>
+    <table>
+        <tr>
+            <td>Username:</td>
+            <td><input id="txtUsername" type="text" th:field="*{username}" /></td>
+            <td th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username errors</td>
+        </tr>
+        <tr>
+            <td>Age:</td>
+            <td><input id="txtAge" type="text" th:field="*{age}" /></td>
+            <td th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age errors</td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td><input id="txtPassword" type="password" th:field="*{password}" /></td>
+            <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password errors</td>
+        </tr>
+        <tr>
+            <td>Confirm password:</td>
+            <td><input id="txtConfirmPassword" type="password" th:field="*{confirmPassword}" /></td>
+            <td th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Confirm password errors</td>
+        </tr>
+        <tr>
+            <td><p><input id="btnRegister" type="submit" value="Submit" /></p></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

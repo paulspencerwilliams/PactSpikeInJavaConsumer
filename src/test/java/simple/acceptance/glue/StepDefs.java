@@ -1,6 +1,7 @@
 package simple.acceptance.glue;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
+import cucumber.api.PendingException;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Then;
@@ -70,6 +71,20 @@ public class StepDefs  {
     @Then("^I will be prompted to try again suggesting why$")
     public void iWillBePromptedToTryAgainSuggestingWhy() throws Throwable {
         assertThat(driver.findElement(By.id("errorMessage")).getText(), is("Bad credentials, try again"));
+    }
+
+    @When("^I attempt to register with partial details$")
+    public void iAttemptToRegisterWithPartialDetails() throws Throwable {
+        driver.navigate().to(baseurl + "/registrationForm");
+
+        driver.findElement(By.id("txtPassword")).sendKeys("Secre");
+        driver.findElement(By.id("txtConfirmPassword")).sendKeys("Unconcealed");
+        driver.findElement(By.id("btnRegister")).click();
+    }
+
+    @Then("^I will be prompted to fill in blanks allowing me to register successfully$")
+    public void iWillBePromptedToFillInBlanksAllowingMeToRegisterSuccessfully() throws Throwable {
+        assertThat(driver.findElement(By.id("errorMessage")).getText(), is("There are errors on this form"));
     }
 
     @Before
