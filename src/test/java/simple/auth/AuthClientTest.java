@@ -32,25 +32,39 @@ public class AuthClientTest {
         return builder
                 .given("Paul exists with password Secret")
                     .uponReceiving("valid authentication details")
-                    .path("/login")
-                    .query("username=Paul&password=Secret")
-                    .headers(requestHeaders)
-                    .method("GET")
-                .willRespondWith()
-                    .status(200)
-                    .headers(expectedResponseHeaders)
-                    .body("{\"id\":123,\"username\":\"paul\",\"firstname\":\"Paul\",\"lastname\":\"Williams\"}")
+                        .path("/login")
+                        .query("username=Paul&password=Secret")
+                        .headers(requestHeaders)
+                        .method("GET")
+                    .willRespondWith()
+                        .status(200)
+                        .headers(expectedResponseHeaders)
+                        .body("{\"id\":123,\"username\":\"paul\",\"firstname\":\"Paul\",\"lastname\":\"Williams\"}")
+                    .uponReceiving("incorrect password")
+                        .path("/login")
+                        .query("username=Paul&password=Unconcealed")
+                        .headers(requestHeaders)
+                        .method("GET")
+                    .willRespondWith()
+                        .status(401)
                 .toPact();
     }
 
     @Test
     @PactVerification()
     public void successfulLogin() {
-        User login = new AuthClient().login("Paul", "Secret");
-        assertThat(login, is(notNullValue()));
-        assertThat(login.getId(), is(123));
-        assertThat(login.getUsername(), is("paul"));
-        assertThat(login.getFirstname(), is("Paul"));
-        assertThat(login.getLastname(), is("Williams"));
+        AuthClient sut = new AuthClient();
+
+        LoginResponse successful = sut.login("Paul", "Secret");
+        assertThat(successful, is(notNullValue()));
+        assertThat(successful.getStatus(), is(LoginResponse.Types.SUCCESS));
+        assertThat(successful.getLoggedInUser().getId(), is(123));
+        assertThat(successful.getLoggedInUser().getUsername(), is("paul"));
+        assertThat(successful.getLoggedInUser().getFirstname(), is("Paul"));
+        assertThat(successful.getLoggedInUser().getLastname(), is("Williams"));
+
+        LoginResponse incorrectCredentials = sut.login("Paul", "Unconcealed");
+        assertThat(incorrectCredentials, is(notNullValue()));
+        assertThat(incorrectCredentials.getStatus(), is(LoginResponse.Types.BAD_CREDENTIALS));
     }
 }

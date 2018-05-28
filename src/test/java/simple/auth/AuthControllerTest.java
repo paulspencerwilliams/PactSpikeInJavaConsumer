@@ -29,7 +29,7 @@ public class AuthControllerTest {
 
     @Test
     public void successfulLogin() throws Exception {
-        when(authClient.login("paul", "secret")).thenReturn(new User(123, "paul", "Paul", "Williams"));
+        when(authClient.login("paul", "secret")).thenReturn(new LoginResponse(new User(123, "paul", "Paul", "Williams")));
 
         Page page = wc.getPage("/loginForm");
         assertThat(page.isHtmlPage(), is(true));

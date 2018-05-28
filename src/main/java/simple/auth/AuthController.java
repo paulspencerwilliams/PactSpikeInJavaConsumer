@@ -26,9 +26,17 @@ public class AuthController {
 
     @PostMapping("/login")
     public String submitLogin(@ModelAttribute Credentials credentials, Model model) {
-        User user = authClient.login(credentials.getUsername(), credentials.getPassword());
-        model.addAttribute("user", user);
-        return "homepage";
+        LoginResponse response = authClient.login(credentials.getUsername(), credentials.getPassword());
+        switch (response.getStatus()) {
+            case SUCCESS:
+                model.addAttribute("user", response.getLoggedInUser());
+                return "homepage";
+            case BAD_CREDENTIALS:
+                model.addAttribute("message", "Bad credentials, try again");
+                return "loginForm";
+            default:
+                throw new RuntimeException("Unhandled scenario");
+        }
     }
 
 }
