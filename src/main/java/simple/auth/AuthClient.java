@@ -38,4 +38,14 @@ public class AuthClient {
             throw new RuntimeException("Unexpected response");
         }
     }
+
+    public RegistrationResponse register(RegistrationRequest request) {
+        URI uri = UriComponentsBuilder.fromUriString("http://localhost:8081/register")
+                .build()
+                .toUri();
+
+        RestTemplate restTemplate = new RestTemplate();
+        User registered = restTemplate.postForObject(uri, request, User.class);
+        return new RegistrationResponse(registered);
+    }
 }
