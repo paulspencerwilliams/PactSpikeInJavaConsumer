@@ -1,11 +1,12 @@
 package simple.acceptance.glue;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import cucumber.api.PendingException;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.hamcrest.Matchers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,7 @@ import simple.Application;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -49,7 +51,7 @@ public class StepDefs  {
     public void iWillBeWelcomedPersonally() throws Throwable {
         WebDriver driver = DriverFactory.getInstance().getDriver();
         String bodyText = driver.findElement(By.tagName("body")).getText();
-        assertThat(bodyText, is("Hi, Paul Williams"));
+        assertThat(bodyText, containsString("Hi, Paul Williams"));
     }
 
     @When("^I attempt to log in with the wrong password$")
@@ -82,6 +84,25 @@ public class StepDefs  {
         driver.findElement(By.id("btnRegister")).click();
     }
 
+    @When("^I register$")
+    public void iRegister() throws Throwable {
+        wireMockServer
+                .stubFor(post(urlPathMatching("/register"))
+                        .withRequestBody(equalToJson("{\"username\": \"paul\", \"age\": 40, \"password\": \"Secret\"}"))
+                        .willReturn(aResponse()
+                                .withStatus(201)
+                                .withHeader("Content-Type", "application/json;charset=UTF-8")
+                                .withBody("{\"id\":123,\"username\":\"paul\",\"firstname\":\"Paul\",\"lastname\":\"Williams\"}")));
+
+        driver.navigate().to(baseurl + "/registrationForm");
+
+        driver.findElement(By.id("txtUsername")).sendKeys("paul");
+        driver.findElement(By.id("txtPassword")).sendKeys("Secret");
+        driver.findElement(By.id("txtAge")).sendKeys("40");
+        driver.findElement(By.id("txtConfirmPassword")).sendKeys("Secret");
+        driver.findElement(By.id("btnRegister")).click();
+    }
+
     @Then("^I will be prompted to fill in blanks allowing me to register successfully$")
     public void iWillBePromptedToFillInBlanksAllowingMeToRegisterSuccessfully() throws Throwable {
         assertThat(driver.findElement(By.id("errorMessage")).getText(), is("There are errors on this form"));
@@ -93,6 +114,13 @@ public class StepDefs  {
         wireMockServer.start();
         driver = DriverFactory.getInstance().getDriver();
 
+    }
+
+    @And("^I will be notified that I need to verify my email$")
+    public void iWillBeNotifiedThatINeedToVerifyMyEmail() throws Throwable {
+        WebDriver driver = DriverFactory.getInstance().getDriver();
+        String bodyText = driver.findElement(By.tagName("body")).getText();
+        assertThat(bodyText, Matchers.containsString("Please check your email"));
     }
 
     @After

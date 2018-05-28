@@ -50,4 +50,8 @@ public class RegistrationForm {
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
     }
+
+    public RegistrationRequest toRequest() {
+        return new RegistrationRequest(username, age, password);
+    }
 }

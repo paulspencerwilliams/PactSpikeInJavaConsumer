@@ -11,3 +11,8 @@ Feature: Authentication functionality
   Scenario: Registration is validated
     When I attempt to register with partial details
     Then I will be prompted to fill in blanks allowing me to register successfully
+
+  Scenario: Successful registration
+    When I register
+    Then I will be welcomed personally
+    And I will be notified that I need to verify my email

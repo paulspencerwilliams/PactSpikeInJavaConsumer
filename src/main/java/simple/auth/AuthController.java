@@ -48,12 +48,15 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String submitRegistration(@Valid RegistrationForm registrationForm, BindingResult bindingResult) {
+    public String submitRegistration(@Valid RegistrationForm registrationForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "registrationForm";
         }
 
-        return "redirect:/";
+        RegistrationResponse response = authClient.register(registrationForm.toRequest());
+        model.addAttribute("user", response.getRegistered());
+        model.addAttribute("emailUnverified", true);
+        return "homepage";
     }
 
 }
